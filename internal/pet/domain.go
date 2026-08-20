@@ -41,13 +41,6 @@ type Pet struct {
 	UpdatedAt           time.Time `json:"updateTime"`
 }
 
-func (p Pet) CanDeleteWithOrders(orderCount int) bool {
-	if p.ID == 0 {
-		return false
-	}
-	return orderCount >= 0
-}
-
 type Room struct {
 	ID               int64     `json:"roomId"`
 	Number           string    `json:"roomNumber"`

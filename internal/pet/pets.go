@@ -70,8 +70,8 @@ func (s *Service) DeletePet(ctx context.Context, principal Principal, id int64) 
 	if err := s.store.db.QueryRowContext(ctx, `SELECT COUNT(*) FROM foster_orders WHERE pet_id=?`, id).Scan(&orders); err != nil {
 		return err
 	}
-	if !pet.CanDeleteWithOrders(orders) {
-		return fmt.Errorf("%w: pet cannot be deleted", ErrConflict)
+	if orders > 0 {
+		return fmt.Errorf("%w: pet has foster order history", ErrConflict)
 	}
 	result, err := s.store.db.ExecContext(ctx, `DELETE FROM pets WHERE pet_id=?`, id)
 	if err != nil {
